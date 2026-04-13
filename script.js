@@ -12,6 +12,11 @@ const questions=[
     question:"2+3=?",
     answers:["4","5","6"],
     correct: 1
+},
+{
+    question:"Color of the sky?",
+    answers:["Green","Blue","Orange"],
+    correct: 1
 }
 
 
