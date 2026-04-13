@@ -24,10 +24,15 @@ const questions=[
 
 let currentQuestion= 0;
 let score= 0;
+let timeLeft=10;
+let timerInterval;
+
+const timerEl=document.getElementById("timer");
 
 const questionEl=document.getElementById("question");
 const answerEl=document.getElementById("answers");
 const nextBtn=document.getElementById("nextBtn");
+const restartBtn=document.getElementById("restartBtn");
 
 function showQuestion() {
 
@@ -45,11 +50,42 @@ function showQuestion() {
 
         answerEl.appendChild(btn);
     });
-
+    clearInterval(timerInterval);
+        startTimer();
 
 }
 
+function startTimer(){
+    timeLeft=10;
+    timerEl.innerText=`Time: ${timeLeft}`;
+
+    timerInterval=setInterval(() => {
+        timeLeft--;
+        timerEl.innerText=`Time: ${timeLeft}`;
+
+        if (timeLeft===0) {
+            clearInterval(timerInterval);
+            autoNext();
+        }
+    },1000);
+}
+
+function autoNext() {
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        showQuestion();
+        
+    } else {
+        showResult();
+    }
+}
+
+
 function selectAnswer(index) {
+
+    clearInterval(timerInterval);
+
     const correct=questions[currentQuestion].correct;
 
     const buttons = answerEl.querySelectorAll("button");
@@ -84,9 +120,21 @@ function showResult() {
     questionEl.innerText = `Done! Score: ${score}/${questions.length}`;
     answerEl.innerHTML="";
     nextBtn.style.display="none";
-
+    restartBtn.style.display="block";
+    timerEl.innerText="";
 
 }
 
+restartBtn.addEventListener("click",()=> {
+    currentQuestion=0;
+    score=0;
+
+    nextBtn.style.display="block";
+    restartBtn.style.display="none";
+
+    showQuestion();
+    clearInterval(timerInterval);
+
+});
 
 showQuestion();
