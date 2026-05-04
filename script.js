@@ -34,6 +34,18 @@ const answerEl=document.getElementById("answers");
 const nextBtn=document.getElementById("nextBtn");
 const restartBtn=document.getElementById("restartBtn");
 
+const sounds = {
+    correct: new Audio ("assets/sounds/correct.mp3"),
+    wrong: new Audio ("assets/sounds/wrong.mp3"),
+    click: new Audio ("assets/sounds/click.mp3") 
+
+};
+
+function playSound(name) {
+    sounds[name].currenttime=0;
+    sounds[name].play();
+}
+
 function showQuestion() {
 
     const q=questions[currentQuestion];
@@ -46,7 +58,10 @@ function showQuestion() {
         const btn= document.createElement("button");
         btn.innerText= answer;
 
-        btn.addEventListener("click",() => selectAnswer(index));
+        btn.addEventListener("click",() => {
+
+            playSound("click");
+            selectAnswer(index)});
 
         answerEl.appendChild(btn);
     });
@@ -72,7 +87,7 @@ function startTimer(){
 
 function autoNext() {
     currentQuestion++;
-
+    
     if (currentQuestion < questions.length) {
         showQuestion();
         
@@ -102,7 +117,11 @@ function selectAnswer(index) {
 
     if (index === correct) {
         score++;
+        playSound("correct");
+    } else{
+        playSound("wrong");
     }
+
 
 }
 
@@ -128,6 +147,7 @@ function showResult() {
 restartBtn.addEventListener("click",()=> {
     currentQuestion=0;
     score=0;
+    playSound("click");
 
     nextBtn.style.display="block";
     restartBtn.style.display="none";
